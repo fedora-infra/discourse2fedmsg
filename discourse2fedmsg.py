@@ -15,6 +15,7 @@ License:    GPLv2+
 import hmac
 import hashlib
 import json
+import os
 
 import fedmsg
 import flask
@@ -23,7 +24,11 @@ import logging
 log = logging.getLogger()
 
 app = flask.Flask(__name__)
-app.config.from_envvar('DISCOURSE2FEDMSG_CONFIG')
+
+secret = os.environ.get('DISCOURSE2FEDMSG_SECRET', 'CHANGEME')
+
+if secret == 'CHANGEME':
+    raise Exception('Please provide a secret via DISCOURSE2FEDMSG_SECRET env')
 
 
 @app.route('/')
@@ -46,7 +51,7 @@ def webhook():
     payload = flask.request.data
 
     calced_sig = hmac.new(
-        app.config['secret'],
+        secret,
         payload,
         hashlib.sha256
     ).hexidgest()
