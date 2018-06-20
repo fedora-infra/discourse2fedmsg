@@ -55,18 +55,18 @@ def webhook():
         payload,
         hashlib.sha256
     ).hexdigest()
-    log.debug('Comparing %r with %r' % (header_sig, calced_sig))
+    log.info('Comparing %r with %r' % (header_sig, calced_sig))
 
     if header_sig != calced_sig:
         return 'Signature not valid.', 403
 
     payload = json.loads(payload)
-    log.debug('Payload: %r' % payload)
+    log.info('Payload: %r' % payload)
 
     # Crazy enough..... they don't seem to have this in the signed portion of
     # the payload.... At least not per the docs...
     topic = flask.request.headers.get('X-Discourse-Event-Type', None)
-    log.debug('Topic: %s' % topic)
+    log.info('Topic: %s' % topic)
 
     return "Testing before sending"
 
