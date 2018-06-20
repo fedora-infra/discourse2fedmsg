@@ -11,5 +11,5 @@ setup(
     url='https://pagure.io/discourse2fedmsg',
     py_modules=['discourse2fedmsg'],
     packages=[],
-    install_requires=['fedmsg', 'flask'],
+    install_requires=['fedmsg', 'flask', 'gunicorn'],
 )
