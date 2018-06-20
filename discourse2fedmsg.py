@@ -20,9 +20,6 @@ import os
 import fedmsg
 import flask
 
-import logging
-log = logging.getLogger()
-
 app = flask.Flask(__name__)
 
 secret = os.environ.get('DISCOURSE2FEDMSG_SECRET', 'CHANGEME')
@@ -55,18 +52,18 @@ def webhook():
         payload,
         hashlib.sha256
     ).hexdigest()
-    log.info('Comparing %r with %r' % (header_sig, calced_sig))
+    app.logger.info('Comparing %r with %r' % (header_sig, calced_sig))
 
     if header_sig != calced_sig:
         return 'Signature not valid.', 403
 
     payload = json.loads(payload)
-    log.info('Payload: %r' % payload)
+    app.logger.info('Payload: %r' % payload)
 
     # Crazy enough..... they don't seem to have this in the signed portion of
     # the payload.... At least not per the docs...
     topic = flask.request.headers.get('X-Discourse-Event-Type', None)
-    log.info('Topic: %s' % topic)
+    app.logger.info('Topic: %s' % topic)
 
     return "Testing before sending"
 
