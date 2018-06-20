@@ -12,4 +12,4 @@ setup(
     py_modules=['discourse2fedmsg'],
     packages=[],
     install_requires=['fedmsg', 'flask'],
-
+)
