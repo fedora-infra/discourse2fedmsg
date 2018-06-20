@@ -54,17 +54,21 @@ def webhook():
         secret,
         payload,
         hashlib.sha256
-    ).hexidgest()
+    ).hexdigest()
     log.debug('Comparing %r with %r' % (header_sig, calced_sig))
 
     if header_sig != calced_sig:
         return 'Signature not valid.', 403
 
     payload = json.loads(payload)
+    log.debug('Payload: %r' % payload)
 
     # Crazy enough..... they don't seem to have this in the signed portion of
     # the payload.... At least not per the docs...
     topic = flask.request.headers.get('X-Discourse-Event-Type', None)
+    log.debug('Topic: %s' % topic)
+
+    return "Testing before sending"
 
     # Having verified the message, we're all set.  Republish it on our bus.
     fedmsg.publish(
