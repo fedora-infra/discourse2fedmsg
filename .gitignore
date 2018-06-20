@@ -1,0 +1,3 @@
+dist
+discourse2fedmsg.egg-info
+*.pyc
