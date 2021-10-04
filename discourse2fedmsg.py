@@ -22,59 +22,55 @@ import flask
 
 app = flask.Flask(__name__)
 
-secret = os.environ.get('DISCOURSE2FEDMSG_SECRET', 'CHANGEME')
+secret = os.environ.get("DISCOURSE2FEDMSG_SECRET", "CHANGEME")
 
-if secret == 'CHANGEME':
-    raise Exception('Please provide a secret via DISCOURSE2FEDMSG_SECRET env')
+if secret == "CHANGEME":  # pragma: no cover
+    raise Exception("Please provide a secret via DISCOURSE2FEDMSG_SECRET env")
 
 
-@app.route('/')
+@app.route("/")
 def index():
     return "Source:  https://pagure.io/discourse2fedmsg"
 
 
-@app.route('/webhook', methods=['POST'])
+@app.route("/webhook", methods=["POST"])
 def webhook():
-    header_sig = flask.request.headers.get('X-Discourse-Event-Signature', None)
+    header_sig = flask.request.headers.get("X-Discourse-Event-Signature", None)
 
     if not header_sig:
-        error = 'No X-Discourse-Event-Signature found on request.'
+        error = "No X-Discourse-Event-Signature found on request."
         return error, 403
 
-    if not header_sig.startswith('sha256='):
-        return 'No sha256 prefix found.', 400
-    header_sig = header_sig[len('sha256='):]
+    if not header_sig.startswith("sha256="):
+        return "No sha256 prefix found.", 400
+    header_sig = header_sig[len("sha256=") :]
 
     payload = flask.request.data
 
-    calced_sig = hmac.new(
-        secret,
-        payload,
-        hashlib.sha256
-    ).hexdigest()
-    app.logger.info('Comparing %r with %r' % (header_sig, calced_sig))
+    calced_sig = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+    app.logger.info("Comparing %r with %r" % (header_sig, calced_sig))
 
     if header_sig != calced_sig:
-        return 'Signature not valid.', 403
+        return "Signature not valid.", 403
 
     payload = json.loads(payload)
-    app.logger.info('Payload: %r' % payload)
+    app.logger.info("Payload: %r" % payload)
 
     # Crazy enough..... they don't seem to have this in the signed portion of
     # the payload.... At least not per the docs...
-    topic = flask.request.headers.get('X-Discourse-Event-Type', None)
-    app.logger.info('Topic: %s' % topic)
+    topic = flask.request.headers.get("X-Discourse-Event-Type", None)
+    app.logger.info("Topic: %s" % topic)
 
-    return "Testing before sending"
+    #    return "Testing before sending"
 
     # Having verified the message, we're all set.  Republish it on our bus.
     fedmsg.publish(
-        modname='discourse',
+        modname="discourse",
         topic=topic,
         msg=payload,
     )
     return "Everything is 200 OK"
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8081, debug=True)
+if __name__ == "__main__":  # pragma: no cover
+    app.run(host="0.0.0.0", port=8081, debug=True)  # nosec

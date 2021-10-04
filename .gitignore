@@ -1,3 +1,10 @@
 dist
 discourse2fedmsg.egg-info
 *.pyc
+.venv
+
+# Tests
+.coverage
+.tox
+coverage.xml
+htmlcov/
