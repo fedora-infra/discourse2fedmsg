@@ -2,10 +2,12 @@ Try it out
 ----------
 
 Prepare virtual env::
+
     python -m venv .venv
     source .venv/bin/activate
 
 Install app with dependencies::
+
     pip install .
 
 Run the server::
@@ -19,7 +21,9 @@ Testing
 This app is using `tox` for testing.
 
 Install tox (Fedora)::
+
     dnf install tox
 
 Run the tests::
+
     tox
