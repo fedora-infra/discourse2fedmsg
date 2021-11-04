@@ -1,0 +1,188 @@
+[tool.poetry]
+name = "discourse2fedmsg"
+version = "0.1.0"
+description = "discourse2fedmsg"
+
+license = "GPL-3.0-or-later"
+
+authors = [
+  "Fedora Infrastructure <admin@fedoraproject.org>"
+]
+
+readme = "README.md"
+keywords = ["web", "fedora"]
+repository = "http://github.com/fedora-infra/discourse2fedmsg"
+homepage = "http://github.com/fedora-infra/discourse2fedmsg"
+
+include = [
+    "tox.ini",
+    "*.example",
+    "babel.cfg",
+    "docs/*",
+    "docs/*/*",
+    "tests/*",
+    "tests/*/*",
+]
+
+classifiers = [
+    "Environment :: Web Environment",
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.2"
+flask = "^1.1"
+flask-wtf = "^0.14"
+flask-babel = "^1.0.0"
+flask-healthz = "^0.0.1"
+whitenoise = "^5.0.1"
+flask-sqlalchemy = "^2.4.3"
+flask-migrate = "^2.5.3"
+psycopg2 = "^2.9.0"
+flask-talisman = "^0.8.1"
+gunicorn = "^20.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+pytest-mock = "^3.6.1"
+bandit = "^1.6"
+black = "^21.6b0"
+flake8 = "^3.9.2"
+isort = "^5.1"
+coverage = {extras = ["toml"], version = "^5.2"}
+liccheck = "^0.6.0"
+sphinx = "^3.0"
+beautifulsoup4 = "^4.9"
+pre-commit = "^2.13.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.isort]
+profile = "black"
+lines_after_imports = 2
+force_alphabetical_sort_within_sections = true
+
+[tool.black]
+target-version = ["py36"]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["discourse2fedmsg"]
+
+[tool.coverage.paths]
+source = ["discourse2fedmsg"]
+
+[tool.coverage.report]
+fail_under = 100
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]
+omit = [
+    "discourse2fedmsg/__init__.py"
+]
+
+
+[tool.towncrier]
+package = "discourse2fedmsg"
+filename = "docs/release_notes.rst"
+directory = "news/"
+title_format = "v{version}"
+issue_format = "{issue}"
+template = "news/_template.rst"
+underlines = "=^-"
+wrap = true
+all_bullets = true
+
+  [[tool.towncrier.type]]
+  directory = "bic"
+  name = "Backwards Incompatible Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "dependency"
+  name = "Dependency Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "feature"
+  name = "Features"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "bug"
+  name = "Bug Fixes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "dev"
+  name = "Development Improvements"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "docs"
+  name = "Documentation Improvements"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "other"
+  name = "Other Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "author"
+  name = "Contributors"
+  showcontent = true
+
+
+[tool.liccheck]
+authorized_licenses = [
+  "bsd",
+  "new bsd",
+  "simplified bsd",
+  "apache",
+  "apache 2.0",
+  "apache software",
+  "gnu lgpl",
+  "gpl v2",
+  "GNU General Public License v2 or later (GPLv2+)",
+  "GNU General Public License v3 (GPLv3)",
+  "GNU General Public License v3 or later (GPLv3+)",
+  "GNU Library or Lesser General Public License (LGPL)",
+  "GNU Lesser General Public License v2 or later (LGPLv2+)",
+  "GNU Lesser General Public License v3 or later (LGPLv3+)",
+  "GPLv3+",
+  "LGPLv2+",
+  "gpl v3",
+  "lgpl with exceptions or zpl",
+  "isc",
+  "isc license (iscl)",
+  "mit",
+  "python software foundation",
+  "zpl 2.1",
+  "mpl-2.0",
+  "MPL 2.0",
+  "Mozilla Public License 2.0 (MPL 2.0)",
+  "lgpl",
+  "CC0 (copyright waived)",
+  "Public Domain",
+  "Public Domain <http://unlicense.org>",
+  "Zope Public",
+]
