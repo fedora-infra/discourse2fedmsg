@@ -1,9 +1,0 @@
-- project:
-    check:
-      jobs:
-        - tox-python38
-        - tox-python39
-        - tox-diff-cover
-        - tox-lint
-        - tox-format
-        - tox-bandit

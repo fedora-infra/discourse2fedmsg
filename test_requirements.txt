@@ -1,7 +1,0 @@
-bandit
-black
-coverage
-diff-cover
-flake8
-pytest
-pytest-cov
