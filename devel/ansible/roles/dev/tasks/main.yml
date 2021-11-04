@@ -1,0 +1,57 @@
+---
+- name: Install RPM packages
+  dnf:
+      name:
+        - git
+        - vim
+        - poetry
+        - python3-flask
+        - python3-pip
+        - tox
+        - fedora-messaging
+      state: present
+
+- name: install python deps with poetry
+  shell: poetry install
+  become: yes
+  become_user: vagrant
+  args:
+    chdir: /home/vagrant/discourse2fedmsg/
+
+- name: Install the .bashrc
+  copy:
+      src: bashrc
+      dest: /home/vagrant/.bashrc
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+- name: Install the configuration file
+  copy:
+      src: /home/vagrant/discourse2fedmsg/discourse2fedmsg.cfg.default
+      dest: /home/vagrant/discourse2fedmsg.cfg
+      remote_src: yes
+      owner: vagrant
+      group: vagrant
+
+- name: compile the translations
+  shell:
+    cmd: poetry run pybabel compile -d /home/vagrant/discourse2fedmsg/discourse2fedmsg/translations
+    removes: /home/vagrant/discourse2fedmsg/discourse2fedmsg/translations/messages.pot
+  become: yes
+  become_user: vagrant
+
+- name: Install the systemd unit files for the service
+  copy:
+      src: discourse2fedmsg.service
+      dest: /etc/systemd/system/discourse2fedmsg.service
+      mode: 0644
+
+- name: Start the service using systemd
+  systemd:
+    state: started
+    name: discourse2fedmsg
+    daemon_reload: yes
+    enabled: yes
+
+- import_tasks: rabbitmq.yml

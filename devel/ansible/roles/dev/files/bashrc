@@ -1,0 +1,13 @@
+# .bashrc
+
+export FLASK_APP=/home/vagrant/discourse2fedmsg/discourse2fedmsg/app.py
+export FLASK_CONFIG=/home/vagrant/discourse2fedmsg.cfg
+export PATH=$PATH:/home/vagrant/.local/bin
+
+alias discourse2fedmsg-start="sudo systemctl start discourse2fedmsg.service && echo 'discourse2fedmsg is running on http://discourse2fedmsg.test:5000'"
+alias discourse2fedmsg-unit-tests="poetry run pytest -vv --cov discourse2fedmsg/ --cov-report term-missing"
+alias discourse2fedmsg-logs="sudo journalctl -u discourse2fedmsg.service"
+alias discourse2fedmsg-restart="sudo systemctl restart discourse2fedmsg.service && echo 'discourse2fedmsg is running on http://discourse2fedmsg.test:5000'"
+alias discourse2fedmsg-stop="sudo systemctl stop discourse2fedmsg.service && echo 'discourse2fedmsg service stopped'"
+
+cd "discourse2fedmsg"
