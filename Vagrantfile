@@ -11,11 +11,11 @@ Vagrant.configure(2) do |config|
     discourse2fedmsg.vm.box = "f34-cloud-libvirt"
     discourse2fedmsg.vm.hostname = "discourse2fedmsg.test"
 
-    datagrepper.vm.synced_folder '.', '/vagrant', disabled: true
+    discourse2fedmsg.vm.synced_folder '.', '/vagrant', disabled: true
     discourse2fedmsg.vm.synced_folder ".", "/home/vagrant/discourse2fedmsg", type: "sshfs"
 
 
-    discourse2fedmsg.vm.provider do |libvirt|
+    discourse2fedmsg.vm.provider :libvirt do |libvirt|
       libvirt.cpus = 2
       libvirt.memory = 2048 
     end
