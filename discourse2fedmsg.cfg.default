@@ -7,3 +7,7 @@ SESSION_COOKIE_HTTPONLY = True
 
 # Set to True for prod...
 SESSION_COOKIE_SECURE = False
+
+
+# secret set in discourse webhooks UI
+DISCOURSE2FEDMSG_SECRET = "CHANGEMECHANGEME"
