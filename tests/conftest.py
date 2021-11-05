@@ -1,22 +1,14 @@
 import os
 
-import flask_migrate
 import pytest
 
 from discourse2fedmsg.app import create_app
-from discourse2fedmsg.database import db
 
 
 @pytest.fixture
 def app(tmpdir):
     app = create_app()
     app.config.from_object("tests.app_config")
-    # Setup the DB
-    db_path = os.path.join(tmpdir, "database.sqlite")
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
-    with app.app_context():
-        db.create_all()
-        flask_migrate.stamp()
     return app
 
 

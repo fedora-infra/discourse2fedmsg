@@ -7,7 +7,6 @@ from flask_healthz import healthz
 from flask_wtf.csrf import CSRFProtect
 from whitenoise import WhiteNoise
 
-from discourse2fedmsg.database import db, migrate
 from discourse2fedmsg.l10n import babel
 from discourse2fedmsg.views import blueprint
 
@@ -45,10 +44,6 @@ def create_app(config=None):
     babel.init_app(app)
     app.jinja_env.add_extension("jinja2.ext.i18n")
     csrf.init_app(app)
-
-    # Database
-    db.init_app(app)
-    migrate.init_app(app, directory=os.path.join(app.root_path, "migrations"))
 
     # Security
     talisman.init_app(
