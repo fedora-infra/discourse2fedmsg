@@ -8,9 +8,7 @@ except ImportError:
         import pkg_resources
 
         try:
-            __version__ = pkg_resources.get_distribution(
-                "discourse2fedmsg"
-            ).version
+            __version__ = pkg_resources.get_distribution("discourse2fedmsg").version
         except pkg_resources.DistributionNotFound:
             __version__ = None
     except ImportError:
