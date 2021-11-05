@@ -4,15 +4,11 @@ from logging.config import dictConfig
 import flask_talisman
 from flask import Flask
 from flask_healthz import healthz
-from flask_wtf.csrf import CSRFProtect
 from whitenoise import WhiteNoise
 
 from discourse2fedmsg.l10n import babel
 from discourse2fedmsg.views import blueprint
 
-
-# Forms
-csrf = CSRFProtect()
 
 # Security headers
 talisman = flask_talisman.Talisman()
@@ -43,7 +39,6 @@ def create_app(config=None):
     # Extensions
     babel.init_app(app)
     app.jinja_env.add_extension("jinja2.ext.i18n")
-    csrf.init_app(app)
 
     # Security
     talisman.init_app(
