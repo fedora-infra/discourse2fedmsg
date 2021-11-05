@@ -1,5 +1,3 @@
-import os
-
 import pytest
 
 from discourse2fedmsg.app import create_app

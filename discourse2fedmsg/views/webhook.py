@@ -2,6 +2,8 @@ import hashlib
 import hmac
 import json
 
+from fedora_messaging.api import Message, publish
+from fedora_messaging.exceptions import ConnectionException, PublishReturned
 from flask import current_app, request
 
 from . import blueprint as bp
@@ -31,19 +33,28 @@ def webhook():
         return "Signature not valid.", 403
 
     payload = json.loads(payload)
-    current_app.logger.info("Payload: %r" % payload)
 
-    # Crazy enough..... they don't seem to have this in the signed portion of
-    # the payload.... At least not per the docs...
-    topic = request.headers.get("X-Discourse-Event-Type", None)
+    event_type = request.headers.get("X-Discourse-Event-Type", None)
+    event = request.headers.get("X-Discourse-Event", None)
+
+    topic = f"discourse.{event_type}.{event}"
+
     current_app.logger.info("Topic: %s" % topic)
-    current_app.logger.info("Payload: %s" % payload)
+    # current_app.logger.info("Payload: %s" % payload)
     # return "Testing before sending"
 
     # Having verified the message, we're all set.  Republish it on our bus.
-    fedmsg.publish(
-        modname="discourse",
-        topic=topic,
-        msg=payload,
-    )
+    try:
+        msg = Message(
+            topic=topic,
+            body=payload,
+        )
+        publish(msg)
+    except PublishReturned as e:
+        current_app.logger.warning(
+            "Fedora Messaging broker rejected message %s: %s", msg.id, e
+        )
+    except ConnectionException as e:
+        current_app.logger.warning("Error sending message %s: %s", msg.id, e)
+
     return "Everything is 200 OK"
