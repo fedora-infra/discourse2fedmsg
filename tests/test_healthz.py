@@ -1,7 +1,3 @@
-import pytest
-from flask import current_app
-
-
 def test_healthz_liveness(client):
     """Test the /healthz/live check endpoint"""
     response = client.get("/healthz/live")

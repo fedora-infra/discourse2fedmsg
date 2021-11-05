@@ -3,9 +3,6 @@ import hmac
 import json
 import unittest.mock as mock
 
-import pytest
-from flask import current_app
-
 
 @mock.patch("fedmsg.publish")
 def test_webhook(mock_publish, app):
