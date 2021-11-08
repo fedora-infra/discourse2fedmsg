@@ -87,7 +87,7 @@ source = ["discourse2fedmsg"]
 source = ["discourse2fedmsg"]
 
 [tool.coverage.report]
-fail_under = 100
+fail_under = 80
 exclude_lines = [
     "pragma: no cover",
     "if __name__ == .__main__.:",
