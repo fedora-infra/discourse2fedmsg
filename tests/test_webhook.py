@@ -1,20 +1,24 @@
 import hashlib
 import hmac
 import json
-import unittest.mock as mock
 
 from fedora_messaging import api, testing
 
+
 def calc_sig(client, data):
-    return hmac.new(client.config["DISCOURSE2FEDMSG_SECRET"].encode(), json.dumps(data).encode(), hashlib.sha256).hexdigest()
+    return hmac.new(
+        client.config["DISCOURSE2FEDMSG_SECRET"].encode(),
+        json.dumps(data).encode(),
+        hashlib.sha256,
+    ).hexdigest()
 
 
 def test_webhook(app, client):
     data = {"ping": "OK"}
-    headers={
-            "X-Discourse-Event-Signature": f"sha256={calc_sig(app, data)}",
-            "X-Discourse-Event-Type": "ping",
-            "X-Discourse-Event": "ping",
+    headers = {
+        "X-Discourse-Event-Signature": f"sha256={calc_sig(app, data)}",
+        "X-Discourse-Event-Type": "ping",
+        "X-Discourse-Event": "ping",
     }
     with testing.mock_sends(api.Message(topic="discourse.ping.ping", body=data)):
         rv = client.post(
