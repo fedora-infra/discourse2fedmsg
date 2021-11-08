@@ -1,4 +1,6 @@
 ---
+- import_tasks: discourse.yml
+
 - name: Install RPM packages
   dnf:
       name:

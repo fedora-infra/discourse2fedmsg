@@ -1,0 +1,222 @@
+---
+- name: Install RPM packages for discourse
+  dnf:
+      name:
+      - "@development-tools" 
+      - git
+      - rpm-build
+      - zlib-devel
+      - ruby-devel
+      - readline-devel
+      - libpq-devel
+      - ImageMagick
+      - sqlite
+      - sqlite-devel
+      - nodejs
+      - npm
+      - curl
+      - gcc
+      - g++
+      - bzip2
+      - openssl-devel
+      - libyaml-devel
+      - libffi-devel
+      - zlib-devel
+      - gdbm-devel
+      - ncurses-devel
+      - optipng
+      - pngquant
+      - jhead
+      - jpegoptim
+      - gifsicle
+      - postgresql-server
+      - postgresql-contrib
+      - python3-psycopg2
+      - redis
+      state: present
+
+- name: Install svgo with npm
+  community.general.npm:
+    name: svgo
+    global: yes
+
+- name: Install yarn with npm
+  community.general.npm:
+    name: yarn
+    global: yes
+
+- name: Setup the postgresql DB
+  command: postgresql-setup --initdb
+  args:
+    creates: /var/lib/pgsql/data/postgresql.conf
+
+- name: Start postgresql
+  service:
+    name: postgresql
+    enabled: yes
+    state: started
+
+
+- block:
+    - name: Create the user
+      postgresql_user:
+        name: vagrant
+        password: password
+        role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
+
+  become: yes
+  become_user: postgres
+  become_method: sudo
+
+
+- name: Make connection easier
+  copy:
+    dest: /home/vagrant/.pgpass
+    content: "*:*:discourse_development:vagrant:password\n"
+    owner: vagrant
+    group: vagrant
+    mode: 0600
+
+
+- name: Start redis
+  service:
+    name: redis
+    enabled: yes
+    state: started
+
+- name: Install the .bashrc
+  copy:
+    src: bashrc
+    dest: /home/vagrant/.bashrc
+    mode: 0644
+    owner: vagrant
+    group: vagrant
+
+- name: checkout rbenv
+  ansible.builtin.git:
+    repo: 'https://github.com/rbenv/rbenv.git'
+    dest: /home/vagrant/.rbenv
+  become: yes
+  become_user: vagrant
+
+
+- name: initialise rbenv
+  command: src/configure && make -C src && /home/vagrant/.rbenv/bin/rbenv init
+  args:
+    chdir: /home/vagrant/.rbenv
+  become: yes
+  become_user: vagrant
+
+- name: checkout ruby-build
+  ansible.builtin.git:
+    repo: 'https://github.com/rbenv/ruby-build.git'
+    dest: '/home/vagrant/.rbenv/plugins/ruby-build'
+  become: yes
+  become_user: vagrant
+
+
+- name: rbenv install
+  command: '/home/vagrant/.rbenv/bin/rbenv install 2.7.1'
+  become: yes
+  become_user: vagrant
+
+- name: rbenv global
+  command: '/home/vagrant/.rbenv/bin/rbenv global 2.7.1'
+  become: yes
+  become_user: vagrant
+
+- name: rbenv rehash
+  command: '/home/vagrant/.rbenv/bin/rbenv rehash'
+  become: yes
+  become_user: vagrant
+
+- name: gem update
+  command: 'gem update --system'
+  become: yes
+  become_user: vagrant
+
+- name: install gems
+  command: 'gem install bundler mailcatcher rails'
+  become: yes
+  become_user: vagrant
+
+- name: checkout discourse
+  ansible.builtin.git:
+    repo: 'https://github.com/discourse/discourse.git'
+    dest: '/home/vagrant/discourse'
+  become: yes
+  become_user: vagrant
+
+- name: Install Discourse dependencies
+  command: bundle install
+  args:
+    chdir: /home/vagrant/discourse
+  become: yes
+  become_user: vagrant
+
+- name: create the DB
+  shell: bundle exec rake db:create
+  args:
+    chdir: /home/vagrant/discourse
+  become: yes
+  become_user: vagrant
+
+- name: migrate the DB
+  shell: bundle exec rake db:migrate
+  args:
+    chdir: /home/vagrant/discourse
+  become: yes
+  become_user: vagrant
+
+- name: test the migration
+  shell: RAILS_ENV=test bundle exec rake db:create db:migrate
+  args:
+    chdir: /home/vagrant/discourse
+  become: yes
+  become_user: vagrant
+
+- name: Install the systemd unit file for mailcatcher
+  copy:
+      src: "mailcatcher.service"
+      dest: /etc/systemd/system/mailcatcher.service
+      mode: 0644
+
+- name: Start mailcatcher
+  systemd:
+    state: started
+    name: mailcatcher
+    daemon_reload: yes
+    enabled: yes
+
+- name: Install the systemd unit file for discourse
+  copy:
+      src: "discourse.service"
+      dest: /etc/systemd/system/discourse.service
+      mode: 0644
+
+- name: Start discourse service using systemd
+  systemd:
+    state: started
+    name: discourse
+    daemon_reload: yes
+    enabled: yes
+
+- name: Install the systemd unit file for running ember-cli
+  copy:
+      src: "emberjs.service"
+      dest: /etc/systemd/system/emberjs.service
+      mode: 0644
+
+- name: Start ember-cli service using systemd
+  systemd:
+    state: started
+    name: emberjs
+    daemon_reload: yes
+    enabled: yes
+
+- name: create an admin user
+  shell: RAILS_ENV=development bundle exec rake admin:invite[testadmin@example.test]
+  args:
+    chdir: /home/vagrant/discourse
+  become: yes
+  become_user: vagrant
