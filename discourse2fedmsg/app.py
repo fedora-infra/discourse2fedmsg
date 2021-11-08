@@ -6,7 +6,6 @@ from flask import Flask
 from flask_healthz import healthz
 from whitenoise import WhiteNoise
 
-from discourse2fedmsg.l10n import babel
 from discourse2fedmsg.views import blueprint
 
 
@@ -35,10 +34,6 @@ def create_app(config=None):
     # Logging
     if app.config.get("LOGGING"):
         dictConfig(app.config["LOGGING"])
-
-    # Extensions
-    babel.init_app(app)
-    app.jinja_env.add_extension("jinja2.ext.i18n")
 
     # Security
     talisman.init_app(

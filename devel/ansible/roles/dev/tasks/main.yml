@@ -36,13 +36,6 @@
       owner: vagrant
       group: vagrant
 
-- name: compile the translations
-  shell:
-    cmd: poetry run pybabel compile -d /home/vagrant/discourse2fedmsg/discourse2fedmsg/translations
-    removes: /home/vagrant/discourse2fedmsg/discourse2fedmsg/translations/messages.pot
-  become: yes
-  become_user: vagrant
-
 - name: Install the systemd unit files for the service
   copy:
       src: discourse2fedmsg.service

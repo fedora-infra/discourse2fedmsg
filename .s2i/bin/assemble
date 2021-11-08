@@ -19,8 +19,6 @@ $VENV_DIR/bin/pip install --upgrade pip
 echo "---> Installing application and dependencies ..."
 poetry install --no-dev
 
-echo "---> Compiling translations ..."
-pybabel compile -d discourse2fedmsg/translations
 
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
