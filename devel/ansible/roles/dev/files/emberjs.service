@@ -1,0 +1,11 @@
+[Unit]
+Description=emberjs
+
+[Service]
+Environment=PATH=/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:
+User=vagrant
+WorkingDirectory=/home/vagrant/discourse
+ExecStart=bash ruby /home/vagrant/discourse/bin/ember-cli
+
+[Install]
+WantedBy=multi-user.target

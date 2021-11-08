@@ -1,0 +1,14 @@
+[Unit]
+Description=discourse
+
+[Service]
+Environment=PATH=/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:
+Environment=UNICORN_BIND_ALL=1
+Environment=DISCOURSE_DEV_HOSTS=discourse2fedmsg.test
+Environment=DISCOURSE_HOSTNAME=discourse2fedmsg.test
+User=vagrant
+WorkingDirectory=/home/vagrant/discourse
+ExecStart=bundle exec rails server
+
+[Install]
+WantedBy=multi-user.target
