@@ -22,3 +22,18 @@
 
 - name: start rabbitmq
   service: name=rabbitmq-server state=started enabled=yes
+
+# fedora-messaging-logger is a simple service that logs all messages to journal
+# so you can go back and easily see all messages sent here
+- name: Install the systemd unit files for the fedora-messaging-logger service
+  copy:
+      src: fedora-messaging-logger.service
+      dest: /etc/systemd/system/fedora-messaging-logger.service
+      mode: 0644
+
+- name: Start fedora-messaging-logger service using systemd
+  systemd:
+    state: started
+    name: fedora-messaging-logger
+    daemon_reload: yes
+    enabled: yes
