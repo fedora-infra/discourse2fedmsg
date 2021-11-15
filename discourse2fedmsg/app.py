@@ -4,7 +4,6 @@ from logging.config import dictConfig
 import flask_talisman
 from flask import Flask
 from flask_healthz import healthz
-from whitenoise import WhiteNoise
 
 from discourse2fedmsg.views import blueprint
 
@@ -56,10 +55,5 @@ def create_app(config=None):
     # Register views
     app.register_blueprint(blueprint)
     app.register_blueprint(healthz, url_prefix="/healthz")
-
-    # Static files
-    app.wsgi_app = WhiteNoise(
-        app.wsgi_app, root=f"{app.root_path}/static/", prefix="static/"
-    )
 
     return app
