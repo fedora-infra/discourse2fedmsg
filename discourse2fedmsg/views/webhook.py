@@ -1,10 +1,13 @@
 import hashlib
 import hmac
 import json
+from logging import disable
 
+from discourse2fedmsg_messages import DiscourseMessageV1
 from fedora_messaging.api import Message, publish
 from fedora_messaging.exceptions import ConnectionException, PublishReturned
 from flask import current_app, request
+from jsonschema.exceptions import ValidationError
 
 from . import blueprint as bp
 
@@ -32,29 +35,28 @@ def webhook():
     if header_sig != calced_sig:
         return "Signature not valid.", 403
 
-    payload = json.loads(payload)
+    body = {}
+    header_list = ["X-Discourse-Instance", "X-Discourse-Event-Id", "X-Discourse-Event-Type", "X-Discourse-Event", "X-Discourse-Event-Signature"]
+    body["webhook_headers"] = {headername: request.headers[headername] for headername in header_list}
+    body["webhook_body"] =  json.loads(payload)
 
-    event_type = request.headers.get("X-Discourse-Event-Type", None)
-    event = request.headers.get("X-Discourse-Event", None)
+    topic = f"discoure.{body['webhook_headers']['X-Discourse-Event-Type']}.{body['webhook_headers']['X-Discourse-Event']}"
 
-    topic = f"discourse.{event_type}.{event}"
-
-    current_app.logger.info("Topic: %s" % topic)
-    # current_app.logger.info("Payload: %s" % payload)
-    # return "Testing before sending"
-
-    # Having verified the message, we're all set.  Republish it on our bus.
     try:
-        msg = Message(
+        msg = DiscourseMessageV1(
             topic=topic,
-            body=payload,
+            body=body,
         )
         publish(msg)
     except PublishReturned as e:
-        current_app.logger.warning(
-            "Fedora Messaging broker rejected message %s: %s", msg.id, e
-        )
+        error = f"Fedora Messaging broker rejected message {msg.id}: {e}"
+        current_app.logger.warning(error)
     except ConnectionException as e:
-        current_app.logger.warning("Error sending message %s: %s", msg.id, e)
+        error = f"Error sending message {msg.id}: {e}"
+        current_app.logger.warning(error)
+    except ValidationError as e:
+        error = f"Error validating Fedora Message schema {msg.id}: {e}"
+        current_app.logger.warning(error)
+        return error, 403
 
     return "Everything is 200 OK"
