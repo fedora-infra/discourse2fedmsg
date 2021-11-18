@@ -42,7 +42,7 @@ flask-healthz = "^0.0.3"
 flask-talisman = "^0.8.1"
 gunicorn = "^20.0"
 fedora-messaging = "^2.1.0"
-discourse2fedmsg-messages = { git = "https://github.com/fedora-infra/discourse2fedmsg-messages.git", branch = "main" }
+discourse2fedmsg-messages = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
