@@ -278,7 +278,7 @@ fedora_messaging = "*"
 type = "git"
 url = "https://github.com/fedora-infra/discourse2fedmsg-messages.git"
 reference = "main"
-resolved_reference = "ff5d080bbc7d2bbd36eb1508aa8feb7e39d6af85"
+resolved_reference = "8cc8bba1781944ff572e195fde60ef763b1db0f1"
 
 [[package]]
 name = "distlib"

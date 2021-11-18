@@ -40,7 +40,7 @@ def webhook():
     body["webhook_headers"] = {headername: request.headers[headername] for headername in header_list}
     body["webhook_body"] =  json.loads(payload)
 
-    topic = f"discoure.{body['webhook_headers']['X-Discourse-Event-Type']}.{body['webhook_headers']['X-Discourse-Event']}"
+    topic = f"discourse.{body['webhook_headers']['X-Discourse-Event-Type']}.{body['webhook_headers']['X-Discourse-Event']}"
 
     try:
         msg = DiscourseMessageV1(
