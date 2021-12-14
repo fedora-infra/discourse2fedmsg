@@ -2,7 +2,8 @@ import hashlib
 import hmac
 import json
 
-from fedora_messaging import api, testing
+from discourse2fedmsg_messages import DiscourseMessageV1
+from fedora_messaging import testing
 
 
 def calc_sig(client, data):
@@ -19,8 +20,37 @@ def test_webhook(app, client):
         "X-Discourse-Event-Signature": f"sha256={calc_sig(app, data)}",
         "X-Discourse-Event-Type": "ping",
         "X-Discourse-Event": "ping",
+        "X-Discourse-Instance": "discourse.test",
+        "X-Discourse-Event-Id": "1",
     }
-    with testing.mock_sends(api.Message(topic="discourse.ping.ping", body=data)):
+    expected_body = {"webhook_body": data, "webhook_headers": headers}
+    with testing.mock_sends(
+        DiscourseMessageV1(topic="discourse.ping.ping", body=expected_body)
+    ):
+        rv = client.post(
+            "/webhook",
+            data=json.dumps(data),
+            headers=headers,
+        )
+
+    assert rv.status_code == 200
+    assert b"Everything is 200 OK" in rv.data
+
+
+def test_webhook_remove_cooked_raw(app, client):
+    data = {"ping": "OK", "cooked": "yummy", "raw": "eeew"}
+    headers = {
+        "X-Discourse-Event-Signature": f"sha256={calc_sig(app, data)}",
+        "X-Discourse-Event-Type": "ping",
+        "X-Discourse-Event": "ping",
+        "X-Discourse-Instance": "discourse.test",
+        "X-Discourse-Event-Id": "1",
+    }
+    # The body here should not have cooked or raw keys...
+    expected_body = {"webhook_body": {"ping": "OK"}, "webhook_headers": headers}
+    with testing.mock_sends(
+        DiscourseMessageV1(topic="discourse.ping.ping", body=expected_body)
+    ):
         rv = client.post(
             "/webhook",
             data=json.dumps(data),

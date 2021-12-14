@@ -1,10 +1,9 @@
 import hashlib
 import hmac
 import json
-from logging import disable
 
 from discourse2fedmsg_messages import DiscourseMessageV1
-from fedora_messaging.api import Message, publish
+from fedora_messaging.api import publish
 from fedora_messaging.exceptions import ConnectionException, PublishReturned
 from flask import current_app, request
 from jsonschema.exceptions import ValidationError
@@ -14,7 +13,6 @@ from . import blueprint as bp
 
 @bp.route("/webhook", methods=["POST"])
 def webhook():
-    current_app.logger.error("triggered")
     secret = current_app.config["DISCOURSE2FEDMSG_SECRET"]
 
     header_sig = request.headers.get("X-Discourse-Event-Signature", None)
@@ -36,11 +34,28 @@ def webhook():
         return "Signature not valid.", 403
 
     body = {}
-    header_list = ["X-Discourse-Instance", "X-Discourse-Event-Id", "X-Discourse-Event-Type", "X-Discourse-Event", "X-Discourse-Event-Signature"]
-    body["webhook_headers"] = {headername: request.headers[headername] for headername in header_list}
-    body["webhook_body"] =  json.loads(payload)
+    header_list = [
+        "X-Discourse-Instance",
+        "X-Discourse-Event-Id",
+        "X-Discourse-Event-Type",
+        "X-Discourse-Event",
+        "X-Discourse-Event-Signature",
+    ]
+    body["webhook_headers"] = {
+        headername: request.headers[headername] for headername in header_list
+    }
 
-    topic = f"discourse.{body['webhook_headers']['X-Discourse-Event-Type']}.{body['webhook_headers']['X-Discourse-Event']}"
+    body["webhook_body"] = json.loads(payload)
+
+    # remove cooked and raw from the webhook body (pagure.io/fedora-infrastructure/issue/10420)
+    body["webhook_body"].pop("cooked", None)
+    body["webhook_body"].pop("raw", None)
+
+    topic = (
+        f"discourse."
+        f"{body['webhook_headers']['X-Discourse-Event-Type']}."
+        f"{body['webhook_headers']['X-Discourse-Event']}"
+    )
 
     try:
         msg = DiscourseMessageV1(
