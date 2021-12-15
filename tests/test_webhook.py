@@ -38,7 +38,7 @@ def test_webhook(app, client):
 
 
 def test_webhook_remove_cooked_raw(app, client):
-    data = {"ping": "OK", "cooked": "yummy", "raw": "eeew"}
+    data = {"ping": "OK", "post": {"cooked": "yummy", "raw": "eeew", "post_number": 11}}
     headers = {
         "X-Discourse-Event-Signature": f"sha256={calc_sig(app, data)}",
         "X-Discourse-Event-Type": "ping",
@@ -47,7 +47,10 @@ def test_webhook_remove_cooked_raw(app, client):
         "X-Discourse-Event-Id": "1",
     }
     # The body here should not have cooked or raw keys...
-    expected_body = {"webhook_body": {"ping": "OK"}, "webhook_headers": headers}
+    expected_body = {
+        "webhook_body": {"ping": "OK", "post": {"post_number": 11}},
+        "webhook_headers": headers,
+    }
     with testing.mock_sends(
         DiscourseMessageV1(topic="discourse.ping.ping", body=expected_body)
     ):

@@ -47,9 +47,11 @@ def webhook():
 
     body["webhook_body"] = json.loads(payload)
 
-    # remove cooked and raw from the webhook body (pagure.io/fedora-infrastructure/issue/10420)
-    body["webhook_body"].pop("cooked", None)
-    body["webhook_body"].pop("raw", None)
+    # remove cooked and raw from the post in webhook body
+    # (pagure.io/fedora-infrastructure/issue/10420)
+    if "post" in body["webhook_body"]:
+        body["webhook_body"]["post"].pop("cooked", None)
+        body["webhook_body"]["post"].pop("raw", None)
 
     topic = (
         f"discourse."
