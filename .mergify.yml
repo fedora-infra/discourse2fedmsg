@@ -1,29 +1,50 @@
+queue_rules:
+- name: default
+  conditions:
+  - label!=no-mergify
+  - label!=WIP
+  - -draft
+  - approved-reviews-by=@fedora-infra/data-team
+  - "#changes-requested-reviews-by=0"
+  - status-success=Checks
+  - status-success=Documentation
+  - status-success=Unit tests (py36)
+  - status-success=Unit tests (py37)
+  - status-success=Unit tests (py38)
+  - status-success=Unit tests (py39)
+
+
+
 pull_request_rules:
 
 - name: Automatic merge on approval
   actions:
-    merge:
+    queue:
       method: rebase
-      rebase_fallback: null
-      strict: true
+      name: default
   conditions:
   - label!=no-mergify
+  - label!=WIP
+  - -draft
   - approved-reviews-by=@fedora-infra/data-team
-  - check-success=Checks
-  - check-success=Documentation
-  - check-success=Unit tests (py36)
-  - check-success=Unit tests (py37)
-  - check-success=Unit tests (py38)
-  - check-success=Unit tests (py39)
+  - "#changes-requested-reviews-by=0"
+  - status-success=DCO
+  - status-success=Checks
+  - status-success=Documentation
+  - status-success=Unit tests (py36)
+  - status-success=Unit tests (py37)
+  - status-success=Unit tests (py38)
+  - status-success=Unit tests (py39)
 
 - name: Automatic merge Dependabot PRs
   actions:
-    merge:
+    queue:
       method: rebase
-      rebase_fallback: null
-      strict: true
+      name: default
   conditions:
   - label!=no-mergify
+  - label!=WIP
+  - -draft
   - author=dependabot[bot]
   - approved-reviews-by=github-actions[bot]
   - check-success=Checks
