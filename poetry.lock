@@ -861,14 +861,14 @@ format-nongpl = ["idna", "jsonpointer (>1.13)", "rfc3339-validator", "rfc3986-va
 
 [[package]]
 name = "liccheck"
-version = "0.6.5"
+version = "0.9.1"
 description = "Check python packages from requirement.txt and report issues"
 category = "dev"
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "liccheck-0.6.5-py2.py3-none-any.whl", hash = "sha256:10846e587127d08609a973570eb3b8ee8cfe32a4689c8fd76d6dc74c29013c7a"},
-    {file = "liccheck-0.6.5.tar.gz", hash = "sha256:d4009f1876eb7e4228ecf495e36573ef5b8a226d4cd91235138e417f990a67e8"},
+    {file = "liccheck-0.9.1-py2.py3-none-any.whl", hash = "sha256:0efbca7d765264225f334461cffb152dee13fdbbcdfcb3604f7d40fdc661f695"},
+    {file = "liccheck-0.9.1.tar.gz", hash = "sha256:d41f7ca763688cbb5691ed70ab53cf4608dd68a331f2d672f3cf8799e45e88dd"},
 ]
 
 [package.dependencies]
@@ -995,7 +995,7 @@ files = [
 name = "packaging"
 version = "21.3"
 description = "Core utilities for Python packages"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1046,41 +1046,6 @@ files = [
 gevent = ["gevent"]
 tornado = ["tornado"]
 twisted = ["twisted"]
-
-[[package]]
-name = "pip"
-version = "21.3.1"
-description = "The PyPA recommended tool for installing Python packages."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "pip-21.3.1-py3-none-any.whl", hash = "sha256:deaf32dcd9ab821e359cd8330786bcd077604b5c5730c0b096eda46f95c24a2d"},
-    {file = "pip-21.3.1.tar.gz", hash = "sha256:fd11ba3d0fdb4c07fbc5ecbba0b1b719809420f25038f8ee3cd913d3faa3033a"},
-]
-
-[[package]]
-name = "pip-shims"
-version = "0.7.3"
-description = "Compatibility shims for pip versions 8 thru current."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "pip_shims-0.7.3-py2.py3-none-any.whl", hash = "sha256:2ae9f21c0155ca5c37d2734eb5f9a7d98c4c42a122d1ba3eddbacc9d9ea9fbae"},
-    {file = "pip_shims-0.7.3.tar.gz", hash = "sha256:089e3586a92b1b8dbbc16b2d2859331dc1c412d3e3dbcd91d80e6b30d73db96c"},
-]
-
-[package.dependencies]
-packaging = "*"
-pip = ">=20"
-setuptools = "*"
-wheel = "*"
-
-[package.extras]
-dev = ["nox", "parver", "pre-commit"]
-docs = ["sphinx (<2.0)", "sphinx-rtd-theme"]
-tests = ["pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "readme-renderer[md]"]
 
 [[package]]
 name = "platformdirs"
@@ -1252,7 +1217,7 @@ test = ["flaky", "pretend", "pytest (>=3.0.1)"]
 name = "pyparsing"
 version = "3.0.7"
 description = "Python parsing module"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1374,7 +1339,7 @@ files = [
 name = "pyyaml"
 version = "5.3.1"
 description = "YAML parser and emitter for Python"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -1890,21 +1855,6 @@ dev = ["coverage", "pallets-sphinx-themes", "pytest", "pytest-timeout", "sphinx"
 watchdog = ["watchdog"]
 
 [[package]]
-name = "wheel"
-version = "0.37.1"
-description = "A built-package format for Python"
-category = "main"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-files = [
-    {file = "wheel-0.37.1-py2.py3-none-any.whl", hash = "sha256:4bdcd7d840138086126cd09254dc6195fb4fc6f01c050a1d7236f2630db1d22a"},
-    {file = "wheel-0.37.1.tar.gz", hash = "sha256:e9a504e793efbca1b8e0e9cb979a249cf4a0a7b5b8c9e8b65a5e39d49529c1c4"},
-]
-
-[package.extras]
-test = ["pytest (>=3.0.0)", "pytest-cov"]
-
-[[package]]
 name = "wrapt"
 version = "1.15.0"
 description = "Module for decorators, wrappers and monkey patching."
@@ -2062,4 +2012,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.6.7"
-content-hash = "b412242b77792b93729a0f536b5f89300ef1e634c19958b8ed3d8f7c6d105ee6"
+content-hash = "1a02a84228b16db0f7008d8ec9c6273f5bea6356c2d4e5182be67338a414e661"
