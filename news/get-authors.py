@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 """
-This script browses through git commit history (starting at latest tag), collects all authors of
-commits and creates fragment for `towncrier`_ tool.
+This script browses through git commit history (starting at latest tag),
+collects all authors of commits and creates fragment for `towncrier`_ tool.
 
-It's meant to be run during the release process, before generating the release notes.
+It's meant to be run during the release process,
+before generating the release notes.
 
 Example::
 
