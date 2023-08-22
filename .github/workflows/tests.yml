@@ -36,7 +36,8 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel poetry
+          dnf install -y krb5-devel
+          pip install "poetry>=1.2"
 
       - name: Build the docs
         run: tox -e docs
@@ -57,7 +58,8 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel libpq-devel poetry
+          dnf install -y krb5-devel libpq-devel
+          pip install "poetry>=1.2"
 
       - name: Run unit tests with Tox
         run: tox -e ${{ matrix.tox_env }}-unittest
