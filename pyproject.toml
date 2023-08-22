@@ -56,7 +56,7 @@ coverage = {extras = ["toml"], version = "^5.2 || ^7.0.0"}
 liccheck = "^0.6.0 || ^0.9.0"
 sphinx = "^3.0"
 beautifulsoup4 = "^4.9"
-pre-commit = "^2.13.0"
+pre-commit = "^2.13.0 || ^3.0.0"
 
 
 [build-system]
