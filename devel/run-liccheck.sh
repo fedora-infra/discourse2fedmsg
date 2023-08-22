@@ -7,9 +7,8 @@ set -x
 
 TMPFILE=$(mktemp -t requirements-XXXXXX.txt)
 
-poetry export --dev --without-hashes -f requirements.txt -o $TMPFILE
-
-# Use pip freeze instead of poetry when it fails
-# pip freeze --exclude-editable --isolated > $TMPFILE
-
-liccheck -r $TMPFILE
+poetry export --with dev --without-hashes -f requirements.txt -o $TMPFILE
+# Somehow poetry exports zope.interface as zope-interface and liccheck does not
+# like it.
+sed -i -e "s/zope-interface/zope.interface/g" $TMPFILE
+poetry run liccheck -r $TMPFILE
