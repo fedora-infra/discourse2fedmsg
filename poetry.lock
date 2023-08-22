@@ -600,18 +600,15 @@ flask = "<3.0"
 
 [[package]]
 name = "flask-talisman"
-version = "0.8.1"
+version = "1.1.0"
 description = "HTTP security headers for Flask."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "flask-talisman-0.8.1.tar.gz", hash = "sha256:5d502ec0c51bf1755a797b8cffbe4e94f8684af712ba0b56f3d80b79277ef285"},
-    {file = "flask_talisman-0.8.1-py2.py3-none-any.whl", hash = "sha256:08a25360c771f7a79d6d4db2abfa71f7422e62a714418b671d69d6a201764d05"},
+    {file = "flask-talisman-1.1.0.tar.gz", hash = "sha256:c5f486f5f54420729f84b3c3850cd63f96e8b033a9629bee66c524ea363797ff"},
+    {file = "flask_talisman-1.1.0-py2.py3-none-any.whl", hash = "sha256:3c42b610ebe49b0e35ca150e179bf51aa1da01e4635b49a674868ea681046208"},
 ]
-
-[package.dependencies]
-six = ">=1.9.0"
 
 [[package]]
 name = "gitdb"
@@ -2012,4 +2009,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.6.7"
-content-hash = "3ec4830f4a93e1b8e355396773fd1707caed0fa507fc87e10a92eeaf21b08b1e"
+content-hash = "f21f8892415a5dd2cdf5773d77a8c8278720a64fb6d697986495a7d8a7ceaf94"
