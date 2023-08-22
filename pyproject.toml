@@ -45,7 +45,7 @@ fedora-messaging = ">=2.1.0"
 discourse2fedmsg-messages = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.4"
+pytest = "^6.2.4 || ^7.0.0"
 pytest-cov = "^2.12.1"
 pytest-mock = "^3.6.1"
 bandit = "^1.6"
