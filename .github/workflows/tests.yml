@@ -22,10 +22,14 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel pre-commit
+          dnf install -y krb5-devel
+          pip install "poetry>=1.2"
+
+      - name: Install the project
+        run: poetry install
 
       - name: Run pre-commit checks
-        run: pre-commit run --all-files
+        run: poetry run pre-commit run --all-files
 
   docs:
     name: Documentation
