@@ -36,28 +36,28 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-flask = "^1.1 || ^2.0.0 || ^3.0.0"
-flask-healthz = "^0.0.3 || ^1.0.0"
-flask-talisman = "^0.8.1 || ^1.0.0"
-gunicorn = "^20.0 || ^21.0.0"
+python = "^3.8"
+flask = "^3.0.0"
+flask-healthz = "^1.0.0"
+flask-talisman = "^1.0.0"
+gunicorn = ">=20.0.0"
 fedora-messaging = ">=2.1.0"
 discourse2fedmsg-messages = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.4 || ^7.0.0"
-pytest-cov = "^2.12.1 || ^4.0.0"
-pytest-mock = "^3.6.1"
-bandit = "^1.6"
-black = "^21.6b0"
-flake8 = "^3.9.2 || ^4.0.0 || ^5.0.0 || ^6.0.0"
-isort = "^5.1"
-coverage = {extras = ["toml"], version = "^7.0.0"}
-liccheck = "^0.6.0 || ^0.9.0"
-sphinx = "^5.0 || ^7.0.0"
-beautifulsoup4 = "^4.9"
-pre-commit = "^2.13.0 || ^3.0.0"
-sphinxcontrib-napoleon = "^0.7"
+pytest = ">=6.2.4"
+pytest-cov = ">=2.12.1"
+pytest-mock = ">=3.6.1"
+bandit = ">=1.6"
+black = ">=21.6b0"
+flake8 = ">=3.9.2"
+isort = ">=5.1"
+coverage = {extras = ["toml"], version = ">=7.0.0"}
+liccheck = ">=0.6.0"
+sphinx = ">=5.0"
+beautifulsoup4 = ">=4.9"
+pre-commit = ">=3.2.0"
+sphinxcontrib-napoleon = ">=0.7"
 
 
 [build-system]
@@ -71,7 +71,7 @@ lines_after_imports = 2
 force_alphabetical_sort_within_sections = true
 
 [tool.black]
-target-version = ["py37"]
+target-version = ["py38"]
 
 [tool.pytest.ini_options]
 testpaths = [
