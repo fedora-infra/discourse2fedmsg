@@ -13,22 +13,10 @@ queue_rules:
       - status-success=Unit tests (py39)
       - status-success=Unit tests (py310)
       - status-success=Unit tests (py311)
-    merge_conditions:
-      - label!=no-mergify
-      - label!=WIP
-      - -draft
-      - approved-reviews-by=@fedora-infra/data-team
-      - "#changes-requested-reviews-by=0"
-      - status-success=Checks
-      - status-success=Documentation
-      - status-success=Unit tests (py38)
-      - status-success=Unit tests (py39)
-      - status-success=Unit tests (py310)
-      - status-success=Unit tests (py311)
     merge_method: rebase
 
 pull_request_rules:
-  - name: refactored queue action rule
+  - name: Merge on approval
     conditions: []
     actions:
       queue:
