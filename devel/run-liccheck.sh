@@ -1,14 +1,22 @@
 #!/bin/bash
 
-trap 'rm -f "$TMPFILE"' EXIT
+
+STRATEGY_URL=https://raw.githubusercontent.com/fedora-infra/shared/main/liccheck-strategy.ini
+
+#trap 'rm -f "$TMPFILE $STRATEGY_TMPFILE"' EXIT
+trap 'rm -f "$STRATEGY_TMPFILE"' EXIT
 
 set -e
 set -x
 
 TMPFILE=$(mktemp -t requirements-XXXXXX.txt)
+STRATEGY_TMPFILE=$(mktemp -t liccheck-strategy-XXXXXX.ini)
+
+curl -o $STRATEGY_TMPFILE $STRATEGY_URL
 
 poetry export --with dev --without-hashes -f requirements.txt -o $TMPFILE
-# Somehow poetry exports zope.interface as zope-interface and liccheck does not
-# like it.
-sed -i -e "s/zope-interface/zope.interface/g" $TMPFILE
-poetry run liccheck -r $TMPFILE
+
+# Use pip freeze instead of poetry when it fails
+# poetry run pip freeze --exclude-editable --isolated > $TMPFILE
+
+poetry run liccheck -r $TMPFILE -s $STRATEGY_TMPFILE
