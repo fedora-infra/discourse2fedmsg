@@ -7,7 +7,6 @@ from flask_healthz import healthz
 
 from discourse2fedmsg.views import blueprint
 
-
 # Security headers
 talisman = flask_talisman.Talisman()
 
